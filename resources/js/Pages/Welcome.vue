@@ -8,7 +8,22 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
+    laravelVersion: {
+        type: String,
+        required: true,
+    },
+    phpVersion: {
+        type: String,
+        required: true,
+    },
 });
+
+function handleImageError() {
+    document.getElementById("screenshot-container")?.classList.add("!hidden");
+    document.getElementById("docs-card")?.classList.add("!row-span-1");
+    document.getElementById("docs-card-content")?.classList.add("!flex-row");
+    document.getElementById("background")?.classList.add("!hidden");
+}
 </script>
 
 <template>
@@ -18,7 +33,9 @@ defineProps({
             class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="grid grid-cols-2 gap-2 py-10 lg:grid-cols-3">
+                <header
+                    class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
+                >
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link
                             v-if="$page.props.auth.user"
@@ -46,8 +63,6 @@ defineProps({
                         </template>
                     </nav>
                 </header>
-
-                <main class="mt-6"></main>
             </div>
         </div>
     </div>

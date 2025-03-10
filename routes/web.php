@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\WorkoutController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -31,6 +33,7 @@ Route::resource('chirps', ChirpController::class)
         ->only(['index', 'store', 'update', 'destroy'])
         ->middleware(['auth', 'verified']);
 
-
+Route::post('/workouts', [WorkoutController::class, 'store'])->name('workouts.store');
+Route::get('/workouts', [WorkoutController::class, 'index'])->name('workouts.index');
 
 require __DIR__.'/auth.php';

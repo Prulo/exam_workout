@@ -38,10 +38,10 @@ const showingNavigationDropdown = ref(false);
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    :href="route('chirps.index')"
-                                    :active="route().current('chirps.index')"
+                                    :href="route('workouts.index')"
+                                    :active="route().current('workouts.index')"
                                 >
-                                    Chirps
+                                    Workout
                                 </NavLink>
                             </div>
                         </div>
