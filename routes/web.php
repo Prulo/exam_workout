@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\WorkoutController;
+use App\Http\Controllers\ExerciseController;
+use App\Models\Exercise;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,5 +37,11 @@ Route::resource('chirps', ChirpController::class)
 
 Route::post('/workouts', [WorkoutController::class, 'store'])->name('workouts.store');
 Route::get('/workouts', [WorkoutController::class, 'index'])->name('workouts.index');
+
+Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises.index');
+Route::get('/workout', [ExerciseController::class, 'workout'])->name('workouts.index');; // For the Workout page
+Route::post('/exercises', [ExerciseController::class, 'store'])->name('exercises.store');
+Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->name('exercises.destroy');
+
 
 require __DIR__.'/auth.php';

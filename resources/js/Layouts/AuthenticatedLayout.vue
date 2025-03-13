@@ -43,6 +43,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Workout
                                 </NavLink>
+                                <NavLink
+                                    :href="route('exercises.index')"
+                                    :active="route().current('exercises.index')"
+                                >
+                                    Exercises
+                                </NavLink>
                             </div>
                         </div>
 

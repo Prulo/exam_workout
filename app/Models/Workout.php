@@ -17,7 +17,7 @@ class Workout extends Model
     ];
 
     protected $casts = [
-        'exercises' => 'array', // Automatically cast exercises to an array
+        'exercises' => 'array',
     ];
 
     public function user()

@@ -19,6 +19,9 @@ class WorkoutController extends Controller
         $request->validate([
             'date' => 'required|date',
             'exercises' => 'required|array',
+            'exercises.*.name' => 'required|string',
+            'exercises.*.sets' => 'required|integer|min:1',
+            'exercises.*.reps' => 'required|integer|min:1',
             'notes' => 'nullable|string',
         ]);
 
