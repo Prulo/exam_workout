@@ -38,10 +38,22 @@ const showingNavigationDropdown = ref(false);
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    :href="route('chirps.index')"
-                                    :active="route().current('chirps.index')"
+                                    :href="route('workouts.index')"
+                                    :active="route().current('workouts.index')"
                                 >
-                                    Chirps
+                                    Workout
+                                </NavLink>
+                                <NavLink
+                                    :href="route('exercises.index')"
+                                    :active="route().current('exercises.index')"
+                                >
+                                    Exercises
+                                </NavLink>
+                                <NavLink
+                                    :href="route('calendar.index')"
+                                    :active="route().current('calendar.index')"
+                                >
+                                    Calendar
                                 </NavLink>
                             </div>
                         </div>
