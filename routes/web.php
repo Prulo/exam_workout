@@ -43,5 +43,6 @@ Route::get('/workout', [ExerciseController::class, 'workout'])->name('workouts.i
 Route::post('/exercises', [ExerciseController::class, 'store'])->name('exercises.store');
 Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->name('exercises.destroy');
 
+Route::get('/calendar', [WorkoutController::class, 'calendar'])->name('calendar.index');
 
 require __DIR__.'/auth.php';

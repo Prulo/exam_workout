@@ -14,6 +14,17 @@ class WorkoutController extends Controller
         return Inertia::render('Workouts');
     }
 
+    public function calendar()
+    {
+        $workouts = Workout::where('user_id', Auth::id())
+            ->orderBy('date', 'asc')
+            ->get();
+    
+        return Inertia::render('Calendar', [
+            'workouts' => $workouts,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

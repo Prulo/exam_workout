@@ -49,6 +49,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Exercises
                                 </NavLink>
+                                <NavLink
+                                    :href="route('calendar.index')"
+                                    :active="route().current('calendar.index')"
+                                >
+                                    Calendar
+                                </NavLink>
                             </div>
                         </div>
 
