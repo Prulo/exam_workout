@@ -167,7 +167,29 @@ const removeExercise = (index) => {
 
 // Submit workout form
 const submitForm = () => {
-    router.post("/workouts", workout.value, {
+    const page = usePage();
+    const userId = page.props.auth?.user?.id;
+
+    if (!userId) {
+        console.error(
+            "User ID is missing. Make sure the user is authenticated."
+        );
+        return;
+    }
+
+    if (!workout.value.exercises.length) {
+        console.error("Workout must contain at least one exercise.");
+        return;
+    }
+
+    const workoutData = {
+        user_id: userId,
+        date: workout.value.date,
+        exercises: JSON.stringify(workout.value.exercises), // Convert array to JSON
+        notes: workout.value.notes || null,
+    };
+
+    router.post("/workouts", workoutData, {
         onSuccess: () => {
             workout.value = { date: "", exercises: [], notes: "" };
             selectedExercise.value = { id: "", name: "", sets: "", reps: "" };

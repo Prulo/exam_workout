@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('date');
-            $table->json('exercises'); // Store exercises as JSON
+            $table->json('exercises')->default('[]'); // Store exercises as JSON
             $table->string('notes')->nullable();
             $table->timestamps();
         });

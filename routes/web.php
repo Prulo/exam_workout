@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\WorkoutExerciseController;
 use App\Models\Exercise;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +45,6 @@ Route::post('/exercises', [ExerciseController::class, 'store'])->name('exercises
 Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->name('exercises.destroy');
 
 Route::get('/calendar', [WorkoutController::class, 'calendar'])->name('calendar.index');
+Route::post('/workouts/{workout}/update-weight', [WorkoutController::class, 'updateWeight']);
 
 require __DIR__.'/auth.php';
