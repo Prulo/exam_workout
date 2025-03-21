@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
 import Layout from "@/Layouts/AuthenticatedLayout.vue";
+import { usePage, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     workouts: Array,
@@ -23,6 +23,26 @@ props.workouts.forEach((workout) => {
 // Function to toggle visibility of workout details
 const toggleDetails = (date) => {
     calendar.value[date].isVisible = !calendar.value[date].isVisible;
+};
+
+const updateWeight = (exercise) => {
+    if (exercise.newWeight === undefined || exercise.newWeight === "") {
+        alert("Please enter a weight.");
+        return;
+    }
+
+    router.post(
+        `/workout-exercises/${exercise.id}/update-weight`,
+        {
+            weight: exercise.newWeight,
+        },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                exercise.weight = exercise.newWeight; // Update locally after success
+            },
+        }
+    );
 };
 </script>
 
@@ -66,6 +86,26 @@ const toggleDetails = (date) => {
                                             {{ exercise.exercise_name }} -
                                             {{ exercise.sets }} sets x
                                             {{ exercise.reps }} reps
+                                            <span v-if="exercise.weight">
+                                                -@-
+                                                {{ exercise.weight }} kg</span
+                                            >
+
+                                            <!-- Input for Weight -->
+                                            <input
+                                                v-model="exercise.newWeight"
+                                                type="number"
+                                                class="ml-2 border p-1 w-16"
+                                                placeholder="kg"
+                                            />
+
+                                            <!-- Button to Save Weight -->
+                                            <button
+                                                @click="updateWeight(exercise)"
+                                                class="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+                                            >
+                                                Save
+                                            </button>
                                         </li>
                                     </ul>
                                 </li>

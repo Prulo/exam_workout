@@ -47,4 +47,6 @@ Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->
 Route::get('/calendar', [WorkoutController::class, 'calendar'])->name('calendar.index');
 Route::post('/workouts/{workout}/update-weight', [WorkoutController::class, 'updateWeight']);
 
+Route::post('/workout-exercises/{exercise}/update-weight', [WorkoutExerciseController::class, 'updateWeight']);
+
 require __DIR__.'/auth.php';

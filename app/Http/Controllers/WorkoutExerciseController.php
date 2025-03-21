@@ -6,25 +6,16 @@ use Illuminate\Http\Request;
 
 class WorkoutExerciseController extends Controller
 {
-    public function updateWeight(Request $request, WorkoutExercise $workout)
+    
+    public function updateWeight(Request $request, WorkoutExercise $exercise)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'exercise_name' => 'required|string',
-            'weight' => 'required|numeric',
+        $request->validate([
+            'weight' => 'required|numeric|min:0'
         ]);
     
-        // Find the exercise within the workout
-        $exercise = $workout->exercises()->where('exercise_name', $validated['exercise_name'])->first();
+        $exercise->update(['weight' => $request->weight]);
     
-        if ($exercise) {
-            $exercise->weight = $validated['weight'];
-            $exercise->save();
-            return response()->json(['message' => 'Weight updated successfully.']);
-        }
-    
-        return response()->json(['message' => 'Exercise not found.'], 404);
+        return back()->with('success', 'Weight updated!');
     }
-    
 }
 
