@@ -55,4 +55,13 @@ class WorkoutController extends Controller
     
         return redirect()->route('workouts.index')->with('success', 'Workout saved!');
     }
+
+    public function destroy(Workout $exercise)
+{
+    // Delete the workout (exercise)
+    $exercise->delete();
+    
+    // Redirect back with a success message
+    return redirect()->route('workouts.index')->with('success', 'Exercise deleted successfully.');
+}
 }

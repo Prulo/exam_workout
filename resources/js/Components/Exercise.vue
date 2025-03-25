@@ -1,7 +1,5 @@
 <template>
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-semibold mb-6">Add New Exercise</h1>
-
+    <div class="max-w-5xl mx-auto p-6">
         <!-- Success Message -->
         <div
             v-if="successMessage"
