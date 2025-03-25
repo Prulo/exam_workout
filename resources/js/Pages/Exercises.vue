@@ -1,32 +1,14 @@
 <template>
-    <Layout>
+    <Head title="Exercise" />
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                Exercise
+            </h2>
+        </template>
         <Exercise />
-        <div class="container mx-auto p-6">
+        <div class="max-w-5xl mx-auto p-6">
             <h1 class="text-2xl font-semibold mb-6">All Exercises</h1>
-
-            <!-- Select dropdown for exercise names -->
-            <div class="mb-6">
-                <label
-                    for="exerciseSelect"
-                    class="block text-sm font-medium text-gray-700"
-                >
-                    Select an Exercise
-                </label>
-                <select
-                    id="exerciseSelect"
-                    v-model="selectedExercise"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                >
-                    <option disabled value="">Choose an exercise</option>
-                    <option
-                        v-for="exercise in exercises"
-                        :key="exercise.id"
-                        :value="exercise.name"
-                    >
-                        {{ exercise.name }}
-                    </option>
-                </select>
-            </div>
 
             <ul v-if="exercises.length" class="space-y-4 mt-6">
                 <li
@@ -52,14 +34,15 @@
                 <p>No exercises available.</p>
             </div>
         </div>
-    </Layout>
+    </AuthenticatedLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 import Exercise from "@/Components/Exercise.vue";
-import Layout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 // Define a ref to store the list of exercises and the selected exercise name
 const exercises = ref([]);

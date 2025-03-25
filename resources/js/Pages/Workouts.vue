@@ -1,10 +1,12 @@
 <template>
-    <Layout>
-        <div class="max-w-4xl mx-auto p-6">
-            <h1 class="text-2xl font-semibold text-center mb-6">
+    <Head title="Workout" />
+    <AuthenticatedLayout>
+        <template #header>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Add New Workout
-            </h1>
-
+            </h2>
+        </template>
+        <div class="max-w-5xl mx-auto p-6">
             <form @submit.prevent="submitForm" class="space-y-6">
                 <div class="flex flex-col space-y-2">
                     <label for="date" class="text-sm font-medium"
@@ -99,7 +101,7 @@
 
                 <div class="flex flex-col space-y-2">
                     <label for="notes" class="text-sm font-medium"
-                        >Notes (optional)</label
+                        >Workout Name (Pull,Push,Legs):</label
                     >
                     <textarea
                         v-model="workout.notes"
@@ -118,13 +120,14 @@
                 </button>
             </form>
         </div>
-    </Layout>
+    </AuthenticatedLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
-import Layout from "@/Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 
 const workout = ref({
     date: "",
@@ -167,7 +170,29 @@ const removeExercise = (index) => {
 
 // Submit workout form
 const submitForm = () => {
-    router.post("/workouts", workout.value, {
+    const page = usePage();
+    const userId = page.props.auth?.user?.id;
+
+    if (!userId) {
+        console.error(
+            "User ID is missing. Make sure the user is authenticated."
+        );
+        return;
+    }
+
+    if (!workout.value.exercises.length) {
+        console.error("Workout must contain at least one exercise.");
+        return;
+    }
+
+    const workoutData = {
+        user_id: userId,
+        date: workout.value.date,
+        exercises: JSON.stringify(workout.value.exercises), // Convert array to JSON
+        notes: workout.value.notes || null,
+    };
+
+    router.post("/workouts", workoutData, {
         onSuccess: () => {
             workout.value = { date: "", exercises: [], notes: "" };
             selectedExercise.value = { id: "", name: "", sets: "", reps: "" };
