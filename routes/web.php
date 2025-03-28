@@ -5,7 +5,7 @@ use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\WorkoutExerciseController;
-use App\Models\Exercise;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
 
 Route::post('/chirps/generate', [ChirpController::class, 'generate'])->name('chirps.generate');
 
@@ -48,5 +48,6 @@ Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy'])->
 Route::get('/calendar', [WorkoutController::class, 'calendar'])->name('calendar.index');
 
 Route::post('/workout-exercises/{exercise}/update-weight', [WorkoutExerciseController::class, 'updateWeight']);
+});
 
 require __DIR__.'/auth.php';

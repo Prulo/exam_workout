@@ -8,12 +8,10 @@
             {{ successMessage }}
         </div>
 
-        <!-- Error Message -->
         <div v-if="errorMessage" class="bg-red-500 text-white p-4 rounded mb-6">
             {{ errorMessage }}
         </div>
 
-        <!-- Exercise Form -->
         <form @submit.prevent="submitForm" class="space-y-6">
             <div class="flex flex-col space-y-2">
                 <label for="name" class="text-sm font-medium"
@@ -42,7 +40,7 @@
 
             <div class="flex flex-col space-y-2">
                 <label for="description" class="text-sm font-medium"
-                    >Description</label
+                    >Description/Video Link</label
                 >
                 <textarea
                     v-model="exercise.description"
@@ -80,7 +78,7 @@ const submitForm = () => {
         onSuccess: () => {
             successMessage.value = "Exercise added successfully!";
             errorMessage.value = "";
-            exercise.value = { name: "", muscle_group: "", description: "" }; // Reset form
+            exercise.value = { name: "", muscle_group: "", description: "" };
         },
         onError: (errors) => {
             successMessage.value = "";

@@ -17,9 +17,9 @@ class WorkoutController extends Controller
 
     public function calendar()
     {
-        // Fetch workouts for the authenticated user, including the exercises
+        
         $workouts = Workout::where('user_id', Auth::id())
-            ->with('exercises') // Eager load exercises
+            ->with('exercises') 
             ->orderBy('date', 'asc')
             ->get();
     
@@ -37,13 +37,12 @@ class WorkoutController extends Controller
             'notes' => 'nullable|string',
         ]);
     
-        $exercises = json_decode($validated['exercises'], true); // Decode JSON
-        unset($validated['exercises']); // Remove exercises before saving
-    
-        // Create the workout
+        $exercises = json_decode($validated['exercises'], true); 
+        unset($validated['exercises']); 
+        
         $workout = Workout::create($validated);
     
-        // Insert exercises into `workout_exercises`
+        
         foreach ($exercises as $exercise) {
             WorkoutExercise::create([
                 'workout_id' => $workout->id,
@@ -58,10 +57,10 @@ class WorkoutController extends Controller
 
     public function destroy(Workout $exercise)
 {
-    // Delete the workout (exercise)
+    
     $exercise->delete();
     
-    // Redirect back with a success message
-    return redirect()->route('workouts.index')->with('success', 'Exercise deleted successfully.');
+    
+    return redirect()->route('calendar.index')->with('success', 'Exercise deleted successfully.');
 }
 }

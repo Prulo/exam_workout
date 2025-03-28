@@ -36,7 +36,7 @@ function handleImageError() {
                 <header
                     class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
                 >
-                    <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
+                    <nav v-if="canLogin" class="-mx-3 flex-1 justify-end">
                         <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
