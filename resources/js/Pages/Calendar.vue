@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from "vue";
-import Layout from "@/Layouts/AuthenticatedLayout.vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const props = defineProps({
     workouts: Array,
 });
 
-// Organize workouts by date
 const calendar = ref({});
 
 props.workouts.forEach((workout) => {
@@ -20,7 +20,6 @@ props.workouts.forEach((workout) => {
     calendar.value[workout.date].workouts.push(workout);
 });
 
-// Function to toggle visibility of workout details
 const toggleDetails = (date) => {
     calendar.value[date].isVisible = !calendar.value[date].isVisible;
 };
@@ -39,7 +38,7 @@ const updateWeight = (exercise) => {
         {
             preserveScroll: true,
             onSuccess: () => {
-                exercise.weight = exercise.newWeight; // Update locally after success
+                exercise.weight = exercise.newWeight;
             },
         }
     );
@@ -49,11 +48,15 @@ const deleteWorkout = (workoutId, workoutDate) => {
     if (confirm("Are you sure you want to delete this workout?")) {
         router.delete(`/workouts/${workoutId}`, {
             preserveScroll: true,
+            preserveState: true,
             onSuccess: () => {
-                // Remove the deleted workout from the calendar data
                 calendar.value[workoutDate].workouts = calendar.value[
                     workoutDate
                 ].workouts.filter((workout) => workout.id !== workoutId);
+
+                if (calendar.value[workoutDate].workouts.length === 0) {
+                    delete calendar.value[workoutDate];
+                }
             },
         });
     }
@@ -67,8 +70,6 @@ const calculateTotalWeight = (workout) => {
         return total;
     }, 0);
 };
-import { Head } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 </script>
 
 <template>
@@ -120,28 +121,47 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
                                         <li
                                             v-for="exercise in workout.exercises"
                                             :key="exercise.id"
+                                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg shadow-md mb-2"
                                         >
-                                            {{ exercise.exercise_name }} -
-                                            {{ exercise.sets }} sets x
-                                            {{ exercise.reps }} reps
-                                            <span v-if="exercise.weight">
-                                                -@-
-                                                {{ exercise.weight }} kg
-                                            </span>
+                                            <div class="flex-1">
+                                                <p
+                                                    class="font-semibold text-gray-800"
+                                                >
+                                                    {{ exercise.exercise_name }}
+                                                </p>
+                                                <p
+                                                    class="text-gray-600 text-sm"
+                                                >
+                                                    {{ exercise.sets }} sets x
+                                                    {{ exercise.reps }} reps
+                                                    <span
+                                                        v-if="exercise.weight"
+                                                    >
+                                                        - @
+                                                        {{ exercise.weight }}
+                                                        kg</span
+                                                    >
+                                                </p>
+                                            </div>
 
-                                            <input
-                                                v-model="exercise.newWeight"
-                                                type="number"
-                                                class="ml-2 border p-1 w-16"
-                                                placeholder="kg"
-                                            />
-
-                                            <button
-                                                @click="updateWeight(exercise)"
-                                                class="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
+                                            <div
+                                                class="flex items-center gap-2"
                                             >
-                                                Save
-                                            </button>
+                                                <input
+                                                    v-model="exercise.newWeight"
+                                                    type="number"
+                                                    class="border p-1 w-20 text-center rounded-lg"
+                                                    placeholder="kg"
+                                                />
+                                                <button
+                                                    @click="
+                                                        updateWeight(exercise)
+                                                    "
+                                                    class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                                >
+                                                    Save
+                                                </button>
+                                            </div>
                                         </li>
                                     </ul>
                                     <p class="font-bold">

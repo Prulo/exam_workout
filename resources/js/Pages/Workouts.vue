@@ -1,3 +1,97 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { usePage, router } from "@inertiajs/vue3";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+
+const workout = ref({
+    date: "",
+    exercises: [],
+    notes: "",
+});
+
+const exercises = ref([]);
+const selectedExercise = ref({ id: "", name: "", sets: "", reps: "" });
+
+const successMessage = ref("");
+const errorMessage = ref("");
+
+const fetchExercises = () => {
+    const page = usePage();
+    exercises.value = page.props.exercises || [];
+};
+
+const addExercise = () => {
+    const selected = exercises.value.find(
+        (exercise) => exercise.id === selectedExercise.value.id
+    );
+    if (
+        selected &&
+        selectedExercise.value.sets &&
+        selectedExercise.value.reps
+    ) {
+        workout.value.exercises.push({
+            name: selected.name,
+            sets: selectedExercise.value.sets,
+            reps: selectedExercise.value.reps,
+        });
+
+        selectedExercise.value = { id: "", name: "", sets: "", reps: "" };
+    }
+};
+
+const removeExercise = (index) => {
+    workout.value.exercises.splice(index, 1);
+};
+
+const submitForm = () => {
+    const page = usePage();
+    const userId = page.props.auth?.user?.id;
+
+    if (!userId) {
+        console.error(
+            "User ID is missing. Make sure the user is authenticated."
+        );
+        return;
+    }
+
+    if (!workout.value.exercises.length) {
+        console.error("Workout must contain at least one exercise.");
+        return;
+    }
+
+    const workoutData = {
+        user_id: userId,
+        date: workout.value.date,
+        exercises: JSON.stringify(workout.value.exercises),
+        notes: workout.value.notes || null,
+    };
+
+    router.post("/workouts", workoutData, {
+        onSuccess: () => {
+            successMessage.value = "Workout added successfully!";
+            errorMessage.value = "";
+
+            workout.value = { date: "", exercises: [], notes: "" };
+            selectedExercise.value = { id: "", name: "", sets: "", reps: "" };
+
+            fetchExercises();
+
+            setTimeout(() => {
+                successMessage.value = "";
+            }, 5000);
+        },
+        onError: (errors) => {
+            successMessage.value = "";
+            errorMessage.value = "Failed to add workout. Please try again.";
+            console.error("Error submitting form:", errors);
+        },
+    });
+};
+
+onMounted(fetchExercises);
+</script>
+
 <template>
     <Head title="Workout" />
     <AuthenticatedLayout>
@@ -8,6 +102,19 @@
         </template>
         <div class="max-w-5xl mx-auto p-6">
             <form @submit.prevent="submitForm" class="space-y-6">
+                <div
+                    v-if="successMessage"
+                    class="bg-green-100 text-green-700 p-2 rounded"
+                >
+                    {{ successMessage }}
+                </div>
+                <div
+                    v-if="errorMessage"
+                    class="bg-red-100 text-red-700 p-2 rounded"
+                >
+                    {{ errorMessage }}
+                </div>
+
                 <div class="flex flex-col space-y-2">
                     <label for="date" class="text-sm font-medium"
                         >Workout Date</label
@@ -101,7 +208,7 @@
 
                 <div class="flex flex-col space-y-2">
                     <label for="notes" class="text-sm font-medium"
-                        >Workout Name (Pull,Push,Legs):</label
+                        >Workout Name (Pull, Push, Legs):</label
                     >
                     <textarea
                         v-model="workout.notes"
@@ -122,92 +229,3 @@
         </div>
     </AuthenticatedLayout>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-
-const workout = ref({
-    date: "",
-    exercises: [],
-    notes: "",
-});
-
-const exercises = ref([]);
-const selectedExercise = ref({ id: "", name: "", sets: "", reps: "" });
-
-const fetchExercises = () => {
-    const page = usePage();
-    exercises.value = page.props.exercises || [];
-};
-
-const addExercise = () => {
-    const selected = exercises.value.find(
-        (exercise) => exercise.id === selectedExercise.value.id
-    );
-    if (
-        selected &&
-        selectedExercise.value.sets &&
-        selectedExercise.value.reps
-    ) {
-        workout.value.exercises.push({
-            name: selected.name,
-            sets: selectedExercise.value.sets,
-            reps: selectedExercise.value.reps,
-        });
-
-        // Reset selected exercise after adding it
-        selectedExercise.value = { id: "", name: "", sets: "", reps: "" };
-    }
-};
-
-// Remove an exercise from the workout
-const removeExercise = (index) => {
-    workout.value.exercises.splice(index, 1);
-};
-
-// Submit workout form
-const submitForm = () => {
-    const page = usePage();
-    const userId = page.props.auth?.user?.id;
-
-    if (!userId) {
-        console.error(
-            "User ID is missing. Make sure the user is authenticated."
-        );
-        return;
-    }
-
-    if (!workout.value.exercises.length) {
-        console.error("Workout must contain at least one exercise.");
-        return;
-    }
-
-    const workoutData = {
-        user_id: userId,
-        date: workout.value.date,
-        exercises: JSON.stringify(workout.value.exercises), // Convert array to JSON
-        notes: workout.value.notes || null,
-    };
-
-    router.post("/workouts", workoutData, {
-        onSuccess: () => {
-            workout.value = { date: "", exercises: [], notes: "" };
-            selectedExercise.value = { id: "", name: "", sets: "", reps: "" };
-            router.visit("/workouts");
-        },
-        onError: (errors) => {
-            console.error("Error submitting form:", errors);
-        },
-    });
-};
-
-// Fetch exercises on mount
-onMounted(fetchExercises);
-</script>
-
-<style scoped>
-/* Custom styles if needed */
-</style>
