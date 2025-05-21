@@ -5,7 +5,6 @@ use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\WorkoutExerciseController;
-
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
