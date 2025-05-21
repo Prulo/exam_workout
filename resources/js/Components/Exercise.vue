@@ -40,8 +40,7 @@
 
             <div class="flex flex-col space-y-2">
                 <label for="description" class="text-sm font-medium"
-                    >Description/Video Link</label
-                >
+                    >Description/Video Link</label>
                 <textarea
                     v-model="exercise.description"
                     id="description"

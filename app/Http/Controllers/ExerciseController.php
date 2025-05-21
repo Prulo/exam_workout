@@ -16,12 +16,12 @@ class ExerciseController extends Controller
     {
         $exercises = Exercise::all();
     
-        // If it's an API request, return JSON instead of an Inertia response
+        
         if ($request->wantsJson()) {
             return response()->json($exercises);
         }
     
-        // Otherwise, return an Inertia response
+        
         return Inertia::render('Exercises', [
             'exercises' => $exercises,
         ]);
@@ -32,12 +32,12 @@ class ExerciseController extends Controller
 {
     $exercises = Exercise::all();
 
-    // If it's an API request, return JSON instead of an Inertia response
+    
     if ($request->wantsJson()) {
         return response()->json($exercises);
     }
 
-    // Otherwise, return an Inertia response for the "WorkoutPage"
+    
     return Inertia::render('Workouts', [
         'exercises' => $exercises,
     ]);

@@ -12,12 +12,12 @@ return new class extends Migration {
     {
         Schema::create('workout_exercises', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workout_id')->constrained()->onDelete('cascade'); // Links to workouts table
+            $table->foreignId('workout_id')->constrained()->onDelete('cascade');
             $table->string('exercise_name');
-            $table->integer('weight')->nullable(); // Nullable for bodyweight exercises
+            $table->integer('weight')->nullable(); 
             $table->integer('reps');
             $table->integer('sets');
-            $table->integer('total_volume')->nullable(); // Optional: Store volume if needed
+            $table->integer('total_volume')->nullable(); 
             $table->timestamps();
         });
     }
